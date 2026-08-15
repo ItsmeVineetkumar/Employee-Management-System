@@ -1,5 +1,7 @@
 package com.Project.EmployeeManagementSystem.DTO;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NewEmployeeDto {
-
+    @GeneratedValue(strategy = GenerationType.AUTO)
+private Long Id;
 private String Name;
 private String Email;
 private String Employee_Id;
