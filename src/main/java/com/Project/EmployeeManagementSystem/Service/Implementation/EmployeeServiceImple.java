@@ -27,20 +27,54 @@ public List<EmployeeDto> getAllEmployee(){
 }
 public EmployeeDto addEmployee(NewEmployeeDto employee){
     Employee newEmployee=new Employee(
-            employee.getId(),
             employee.getName(),
             employee.getEmail(),
             employee.getEmployee_Id(),
             employee.getSalary(),
             employee.getDepartment());
-    employeeRepository.save(newEmployee);
+    newEmployee=employeeRepository.save(newEmployee);
     return new EmployeeDto(
-            employee.getId(),
+            newEmployee.getId(),
+            newEmployee.getName(),
+            newEmployee.getEmail(),
+            newEmployee.getEmployee_Id(),
+            newEmployee.getSalary(),
+            newEmployee.getDepartment()
+    );
+}
+public EmployeeDto getEmployeeById(Long id){
+    Employee employee=employeeRepository.findById(id).orElseThrow();
+    return new EmployeeDto(employee.getId(),
             employee.getName(),
             employee.getEmail(),
             employee.getEmployee_Id(),
             employee.getSalary(),
-            employee.getDepartment()
-    );
+            employee.getDepartment());
 }
+public EmployeeDto updateEmployeeById(Long id, NewEmployeeDto employee){
+        Employee checkingEmployeeWithId=employeeRepository.findById(id).orElseThrow(()->new RuntimeException("Employee Not found with Id: "+id));
+        checkingEmployeeWithId.setName(employee.getName());
+        checkingEmployeeWithId.setEmail(employee.getEmail());
+        checkingEmployeeWithId.setEmployee_Id(employee.getEmployee_Id());
+        checkingEmployeeWithId.setSalary(employee.getSalary());
+        checkingEmployeeWithId.setDepartment(employee.getDepartment());
+        checkingEmployeeWithId=employeeRepository.save(checkingEmployeeWithId);
+    return new EmployeeDto(checkingEmployeeWithId.getId(),
+            checkingEmployeeWithId.getName(),
+            checkingEmployeeWithId.getEmail(),
+            checkingEmployeeWithId.getEmployee_Id(),
+            checkingEmployeeWithId.getSalary(),
+            checkingEmployeeWithId.getDepartment());
+    }
+
+    public EmployeeDto deleteEmployeeById(Long id){
+    Employee employee=employeeRepository.findById(id).orElseThrow(()->new RuntimeException("Employee not found with Id: "+id));
+    employeeRepository.delete(employee);
+        return new EmployeeDto(employee.getId(),
+                employee.getName(),
+                employee.getEmail(),
+                employee.getEmployee_Id(),
+                employee.getSalary(),
+                employee.getDepartment());
+    }
 }

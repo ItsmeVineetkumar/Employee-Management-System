@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NewEmployeeDto {
-    @GeneratedValue(strategy = GenerationType.AUTO)
-private Long Id;
 private String Name;
 private String Email;
 private String Employee_Id;

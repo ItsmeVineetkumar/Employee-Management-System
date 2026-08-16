@@ -10,4 +10,7 @@ import java.util.*;
 public interface EmployeeService {
     List<EmployeeDto> getAllEmployee();
     EmployeeDto addEmployee(NewEmployeeDto e);
+    EmployeeDto getEmployeeById(Long id);
+    EmployeeDto updateEmployeeById(Long id,NewEmployeeDto e);
+    EmployeeDto deleteEmployeeById(Long id);
 }

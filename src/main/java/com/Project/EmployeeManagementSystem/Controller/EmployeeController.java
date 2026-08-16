@@ -29,4 +29,25 @@ public class EmployeeController {
         EmployeeDto employeeDto=employeeService.addEmployee(employee);
         return ResponseEntity.ok().body(employeeDto);
     }
+
+    @GetMapping("/api/employee/{id}")
+    public ResponseEntity<EmployeeDto> getEmployeeByID(@PathVariable Long id){
+        EmployeeDto employee=employeeService.getEmployeeById(id);
+        return ResponseEntity.ok().body(employee);
+    }
+
+    @PutMapping("/api/employee/{id}")
+    public ResponseEntity<EmployeeDto> updateEmployeeById(@PathVariable Long id,
+                                                          @RequestBody NewEmployeeDto employee){
+        System.out.println("put mapping is running");
+        System.out.println("Id is: "+id);
+        EmployeeDto updatedEmployee=employeeService.updateEmployeeById(id,employee);
+        return ResponseEntity.ok().body(updatedEmployee);
+    }
+
+    @DeleteMapping("/api/employee/{id}")
+    public ResponseEntity<EmployeeDto> deleteEmployeeById(@PathVariable Long id){
+        EmployeeDto DeletedEmployee=employeeService.deleteEmployeeById(id);
+        return ResponseEntity.ok().body(DeletedEmployee);
+    }
 }
