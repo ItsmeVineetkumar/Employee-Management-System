@@ -52,7 +52,8 @@ public EmployeeDto getEmployeeById(Long id){
             employee.getDepartment());
 }
 public EmployeeDto updateEmployeeById(Long id, NewEmployeeDto employee){
-        Employee checkingEmployeeWithId=employeeRepository.findById(id).orElseThrow(()->new RuntimeException("Employee Not found with Id: "+id));
+        Employee checkingEmployeeWithId=employeeRepository.findById(id).orElseThrow(()->
+                new RuntimeException("Employee Not found with Id: "+id));
         checkingEmployeeWithId.setName(employee.getName());
         checkingEmployeeWithId.setEmail(employee.getEmail());
         checkingEmployeeWithId.setEmployee_Id(employee.getEmployee_Id());
@@ -66,8 +67,7 @@ public EmployeeDto updateEmployeeById(Long id, NewEmployeeDto employee){
             checkingEmployeeWithId.getSalary(),
             checkingEmployeeWithId.getDepartment());
     }
-
-    public EmployeeDto deleteEmployeeById(Long id){
+public EmployeeDto deleteEmployeeById(Long id){
     Employee employee=employeeRepository.findById(id).orElseThrow(()->new RuntimeException("Employee not found with Id: "+id));
     employeeRepository.delete(employee);
         return new EmployeeDto(employee.getId(),
