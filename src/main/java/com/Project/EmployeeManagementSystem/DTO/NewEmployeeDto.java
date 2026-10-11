@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NewEmployeeDto {
-private String Name;
-private String Email;
-private String Employee_Id;
-private Long Salary;
-private String Department;
+private String name;
+private String email;
+private String employee_Id;
+private Long salary;
+private String department;
 }

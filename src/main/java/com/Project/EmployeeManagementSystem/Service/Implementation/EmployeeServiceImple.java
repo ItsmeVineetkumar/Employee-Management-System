@@ -7,6 +7,9 @@ import com.Project.EmployeeManagementSystem.Entity.Employee;
 import com.Project.EmployeeManagementSystem.Repository.EmployeeRepository;
 import com.Project.EmployeeManagementSystem.Service.EmployeeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
@@ -14,9 +17,10 @@ import java.util.*;
 @RequiredArgsConstructor
 public class EmployeeServiceImple implements EmployeeService{
 private final EmployeeRepository employeeRepository;
-public List<EmployeeDto> getAllEmployee(){
-    List<Employee> employee=employeeRepository.findAll();
-    return employee.stream().map(employee1 -> new EmployeeDto(
+public List<EmployeeDto> getAllEmployee(int page,int size){
+    Pageable pageable= PageRequest.of(page,size);
+    Page<Employee> employeePage=employeeRepository.findAll(pageable);
+    return employeePage.getContent().stream().map(employee1 -> new EmployeeDto(
             employee1.getId(),
             employee1.getName(),
             employee1.getEmail(),
@@ -77,4 +81,39 @@ public EmployeeDto deleteEmployeeById(Long id){
                 employee.getSalary(),
                 employee.getDepartment());
     }
+    public List<EmployeeDto> getEmployeesByDepartment(String department){
+    return employeeRepository.findByDepartment(department)
+            .stream().map(employee->new EmployeeDto(employee.getId(),
+                            employee.getName(),
+                            employee.getEmail(),
+                            employee.getEmployee_Id(),
+                            employee.getSalary(),
+                            employee.getDepartment())
+                    ).toList();
+    }
+    public List<EmployeeDto> getEmployeesByName(String name){
+    return employeeRepository.findByName(name).stream().map(employee->
+            new EmployeeDto(
+                    employee.getId(),
+                    employee.getName(),
+                    employee.getEmail(),
+                    employee.getEmployee_Id(),
+                    employee.getSalary(),
+                    employee.getDepartment()
+            )).toList();
+    }
+    public List<EmployeeDto> getEmployeesByEmail(String email){
+    return employeeRepository.findByEmail(email).stream().map(
+            employee -> new EmployeeDto(employee.getId(),
+                    employee.getName(),
+                    employee.getEmail(),
+                    employee.getEmployee_Id(),
+                    employee.getSalary(),
+                    employee.getDepartment())
+    ).toList();
+    }
+    public List<EmployeeDto> addBulkEmployees(List<NewEmployeeDto> employee){
+    return employee.stream().map(this::addEmployee).toList();
+    }
+
 }

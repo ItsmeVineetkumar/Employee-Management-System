@@ -5,7 +5,9 @@ import com.Project.EmployeeManagementSystem.DTO.EmployeeDto;
 import com.Project.EmployeeManagementSystem.DTO.NewEmployeeDto;
 import com.Project.EmployeeManagementSystem.Entity.Employee;
 import com.Project.EmployeeManagementSystem.Service.EmployeeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,17 +25,30 @@ public class EmployeeController {
         return "Hi Brother welcome in Employee Management System";
     }
     @GetMapping("/api/employees")
-    public ResponseEntity<List<EmployeeDto>> getAllEmployees(){
-        List<EmployeeDto> employee=employeeService.getAllEmployee();
+    public ResponseEntity<List<EmployeeDto>> getAllEmployees(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required=false) String email,
+                                                             @RequestParam(required=false) String department,
+                                                             @RequestParam(required=false) String name){
+        List<EmployeeDto> employee=employeeService.getAllEmployee(page,size);
+        if(email!=null && !email.isBlank()) employee=employee.stream().filter(e-> e.getEmail()!=null && e.getEmail().equalsIgnoreCase(email)).toList();
+        if(department!=null && !department.isBlank()) employee=employee.stream().filter(e->e.getDepartment()!=null && e.getDepartment().equalsIgnoreCase(department)).toList();
+        if(name!=null && !name.isBlank()) employee=employee.stream().filter(e->e.getName()!=null && e.getName().equalsIgnoreCase(name)).toList();
+
         return ResponseEntity.ok().body(employee);
     }
 
     @PostMapping("/api/addEmployee")
-    public ResponseEntity<EmployeeDto> addEmployee(@RequestBody NewEmployeeDto employee){
+    public ResponseEntity<EmployeeDto> addEmployee(@Valid @RequestBody NewEmployeeDto employee){
         EmployeeDto employeeDto=employeeService.addEmployee(employee);
         return ResponseEntity.ok().body(employeeDto);
     }
-
+    @PostMapping("api/Employee/bulk")
+    public ResponseEntity<List<EmployeeDto>> addBulkEmployee(@RequestBody List<@Valid NewEmployeeDto> Employee){
+        List<EmployeeDto> savedEmployee= employeeService.addBulkEmployees(Employee);
+        return ResponseEntity.ok().body(savedEmployee);
+    }
     @GetMapping("/api/employee/{id}")
     public ResponseEntity<EmployeeDto> getEmployeeByID(@PathVariable Long id){
         EmployeeDto employee=employeeService.getEmployeeById(id);

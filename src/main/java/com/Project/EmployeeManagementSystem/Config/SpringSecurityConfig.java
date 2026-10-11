@@ -18,9 +18,8 @@ public class SpringSecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http){
-        http.authorizeHttpRequests((request)->request.anyRequest().authenticated());
-        http.formLogin(withDefaults());
-        http.httpBasic(withDefaults());
+http.csrf(scc->scc.disable())
+        .authorizeHttpRequests((request)->request.requestMatchers("/api/**").permitAll().anyRequest().permitAll());
         return http.build();
     }
 
